@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  db:
+    container_name: "PostgressDB"
+    image: postgres:16.0-alpine3.18
+    restart: always
+    ports:
+      - 5432:5432
+    env_file: db-environment.env
+    networks:
+      - production
+
+
+networks:
+  production:
