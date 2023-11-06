@@ -16,15 +16,28 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    environment: build
     steps:
       # Configure
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           persist-credentials: false
+      
+      # Run api for testing
+      - name: Run API
+        run: |
+            docker build -t "recommendationapi:1.0" ./ && \
+            docker run \
+              -e "POSTGRES_PASSWORD=${{secrets.DB_SA_PASS}}" \
+              -e "POSTGRES_USER=${{secrets.POSTGRES_USER}}" \
+              -e "POSTGRES_HOST=${{secrets.POSTGRES_HOST}}" \
+              -e "POSTGRES_DB=${{secrets.POSTGRES_DB}}" \
+              -e "RAILS_MASTER_KEY=${{secrets.RAILS_MASTER_KEY}}" \
+              -d \
+              --name RecommendationAPI \
+              recommendationapi:1.0
 
-      # Create Admin
+      # Run database for testing
       - name: Run DB container
         run: |
             docker run \
