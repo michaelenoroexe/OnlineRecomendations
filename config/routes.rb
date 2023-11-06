@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'patients/:patient_id/recommendations', to: 'recommendations#index'
+  post 'consultation_requests/:request_id/recommendations', to: 'recommendations#create'
   post 'consultation_requests', to: 'consultation_requests#create'
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
