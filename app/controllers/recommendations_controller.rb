@@ -21,6 +21,11 @@ def create
 
   @rec = Recommendation.create(consultation_request_id: @cons, recommendation_text: @recommendation_text)
 
+  if Rails.env.production?
+    RecommendationMailer.with(
+      patient: ConsultationRequest.includes(:patient).find(@cons).patient)
+  end
+
   render json: { created_recommendation_id: @rec.id }, status: 201
 end
 end
